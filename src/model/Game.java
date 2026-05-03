@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.BiConsumer;
@@ -726,10 +728,17 @@ public class Game {
 		if(ghost.isFrightened()) {
 			map.BFS(ghost.getPosition());
 			ghost.setPath(map.getSingleSourcePath(ghost.getTarget()));
+		} else if(ghost.equals(pinky) && Ghost.state == State.CHASE) {
+			ghost.setPath(aStarPath(ghost.getPosition(), ghost.getTarget()));
 		} else { //uses BFS when frightened because ghosts are not influenced by the weight of the edges in that state
 			ghost.setPath(map.getPath(ghost.getPosition(), ghost.getTarget()));
 		}
-		ghost.getPath().remove(0);
+		if(ghost.getPath().isEmpty()) {
+			ghost.setPath(map.getPath(ghost.getPosition(), ghost.getTarget()));
+		}
+		if(!ghost.getPath().isEmpty()) {
+			ghost.getPath().remove(0);
+		}
 		determineDirection(ghost);
 	}
 
@@ -783,12 +792,7 @@ public class Game {
 	private void searchPinkyTarget() {
 		switch(Ghost.state) {
 		case CHASE:
-			ArrayList<Coordinate> adj = map.getAdjacent(pacman.getPosition());
-			adj = map.getAdjacent(adj.get((int)(Math.random()*adj.size())));
-			adj = map.getAdjacent(adj.get((int)(Math.random()*adj.size())));
-			adj = map.getAdjacent(adj.get((int)(Math.random()*adj.size())));
-			adj = map.getAdjacent(adj.get((int)(Math.random()*adj.size())));
-			pinky.setTarget(adj.get((int)(Math.random()*adj.size())));
+			pinky.setTarget(getTileAheadOfPacman(2));
 			break;
 		case SCATTER:
 			if(pinky.getTarget().equals(coordinates.get(9))) {
@@ -800,6 +804,158 @@ public class Game {
 			}
 			break;
 		}
+	}
+
+	//-Jonathan
+	/**This gets a reachable tile in Pacman's current direction.
+	 * @param tilesAhead is the number of tiles to look ahead.
+	 * @return The furthest available tile up to the requested distance.
+	 * Helper
+	 */
+	private Coordinate getTileAheadOfPacman(int tilesAhead) {
+		Coordinate target = pacman.getPosition();
+		for(int i = 0; i < tilesAhead; i++) {
+			Coordinate next = getNeighborInDirection(target, pacman.getDirection());
+			if(next == null) {
+				break;
+			}
+			target = next;
+		}
+		return target;
+	}
+
+	//-Jonathan
+	/**This gets the adjacent tile in a specified direction.
+	 * @param current is the tile to search from.
+	 * @param direction is the direction to search toward.
+	 * @return The adjacent tile in that direction, or null if blocked.
+	 * Helper
+	 */
+	private Coordinate getNeighborInDirection(Coordinate current, Direction direction) {
+		ArrayList<Coordinate> adjacent = map.getAdjacent(current);
+		for(Coordinate neighbor : adjacent) {
+			switch(direction) {
+			case DOWN:
+				if(neighbor.getX() == current.getX() && neighbor.getY() > current.getY()) {
+					return neighbor;
+				}
+				break;
+			case LEFT:
+				if((current.equals(leftTileOfTheTunel) && neighbor.equals(rightTileOfTheTunel))
+						|| neighbor.getY() == current.getY() && neighbor.getX() < current.getX()) {
+					return neighbor;
+				}
+				break;
+			case RIGHT:
+				if((current.equals(rightTileOfTheTunel) && neighbor.equals(leftTileOfTheTunel))
+						|| neighbor.getY() == current.getY() && neighbor.getX() > current.getX()) {
+					return neighbor;
+				}
+				break;
+			case UP:
+				if(neighbor.getX() == current.getX() && neighbor.getY() < current.getY()) {
+					return neighbor;
+				}
+				break;
+			}
+		}
+		return null;
+	}
+
+	//-Jonathan
+	/**This calculates a path using A* from a start tile to a goal tile.
+	 * @param start is the origin tile.
+	 * @param goal is the destination tile.
+	 * @return The path from start to goal, including both endpoints.
+	 */
+	private ArrayList<Coordinate> aStarPath(Coordinate start, Coordinate goal) {
+		
+		// Closed stores tiles that A* has already fully evaluated.
+		ArrayList<Coordinate> closed = new ArrayList<>();
+		
+		// cameFrom remembers the best previous tile for rebuilding the final path.
+		HashMap<Coordinate, Coordinate> cameFrom = new HashMap<>();
+		
+		// gScore stores the known cost from the start tile to each discovered tile.
+		HashMap<Coordinate, Double> gScore = new HashMap<>();
+		
+		// fScore stores gScore plus the heuristic estimate to the goal.
+		HashMap<Coordinate, Double> fScore = new HashMap<>();
+		
+		// Open always gives us the discovered tile with the lowest estimated total cost.
+		PriorityQueue<Coordinate> open = new PriorityQueue<>((a, b) -> Double.compare(
+				fScore.getOrDefault(a, Double.MAX_VALUE), fScore.getOrDefault(b, Double.MAX_VALUE)));
+
+		// Start has no travel cost yet, only the estimated remaining cost.
+		gScore.put(start, 0.0);
+		fScore.put(start, heuristicDistance(start, goal));
+		open.add(start);
+
+		while(!open.isEmpty()) {
+			
+			// Pick the tile that currently looks closest to the best full path.
+			Coordinate current = open.poll();
+			if(closed.contains(current)) {
+				continue;
+			}
+			
+			// Once the goal is selected from open, A* has found the best path to it.
+			if(current.equals(goal)) {
+				return reconstructPath(cameFrom, current);
+			}
+
+			closed.add(current);
+			
+			// Check every tile reachable from the current tile.
+			for(Coordinate neighbor : map.getAdjacent(current)) {
+				if(closed.contains(neighbor)) {
+					continue;
+				}
+				
+				// Cost of reaching this neighbor through the current tile.
+				double tentativeScore = gScore.get(current) + map.getEdgeWeight(current, neighbor);
+				
+				// If this route is better than the previous route, save it.
+				if(tentativeScore < gScore.getOrDefault(neighbor, Double.MAX_VALUE)) {
+					cameFrom.put(neighbor, current);
+					gScore.put(neighbor, tentativeScore);
+					fScore.put(neighbor, tentativeScore + heuristicDistance(neighbor, goal));
+					open.add(neighbor);
+				}
+			}
+		}
+
+		// No route was found.
+		return new ArrayList<>();
+	}
+
+	//-Jonathan
+	/**This estimates the remaining distance between two tiles
+	 * @param current is the tile being scored.
+	 * @param goal is the destination tile.
+	 * @return The estimated remaining cost.
+	 * Helper method
+	 */
+	private double heuristicDistance(Coordinate current, Coordinate goal) {
+		return (Math.abs(current.getX() - goal.getX()) + Math.abs(current.getY() - goal.getY())) / 99.0;
+	}
+
+	//-Jonathan
+	/**This reconstructs a path from the A* predecessor map.
+	 * @param cameFrom stores each tile's previous tile.
+	 * @param current is the goal tile.
+	 * @return The path from the start tile to current.
+	 * Helper method
+	 */
+	private ArrayList<Coordinate> reconstructPath(HashMap<Coordinate, Coordinate> cameFrom, Coordinate current) {
+		ArrayList<Coordinate> path = new ArrayList<>();
+		path.add(current);
+		while(cameFrom.containsKey(current)) {
+			current = cameFrom.get(current);
+			path.add(current);
+		}
+		Collections.reverse(path);
+		return path;
 	}
 
 	/**This method finds clyde's target
