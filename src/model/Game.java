@@ -143,10 +143,10 @@ public class Game {
 		levels = new ArrayList<>();
 		//levels.add(new Level(stage, bonus, pacmanSpeed, pacmanEatingDotsSpeed, ghostsSpeed, ghostsTunelSpeed, cruiseElroyDotsLeft1, cruiseElroySpeed1, cruiseElroyDotsLeft2, cruiseElroySpeed2, pacmanWithEnergizerSpeed, pacmanWithEnergizerEatingDotsSpeed, frightGhostsSpeed, frightTime))
 		//1
-		Level level = new Level(1, Level.CHERRIES, 17, 20, 19, 35, 20, 17, 10, 16, 17, 18, 28, 6000);
+		Level level = new Level(1, Level.CHERRIES, 8, 10, 15, 28, 20, 14, 10, 13, 8, 9, 22, 6000);
 		levels.add(level);
 		//2
-		level = new Level(2, Level.STRAWBERRY, 16, 18, 16, 31, 30, 16, 15, 15, 15, 17, 25, 5000);
+		level = new Level(2, Level.STRAWBERRY, 8, 9, 13, 25, 30, 13, 15, 12, 7, 8, 20, 5000);
 		levels.add(level);
 		//3
 		level = level.clone();
@@ -162,7 +162,7 @@ public class Game {
 		level.setFrightTime(3000);
 		levels.add(level);
 		//5
-		level = new Level(5, Level.APPLE, 14, 16, 15, 28, 40, 14, 20, 13, 14, 16, 23, 2000);
+		level = new Level(5, Level.APPLE, 7, 8, 12, 22, 40, 11, 20, 10, 7, 8, 18, 2000);
 		levels.add(level);
 		//6
 		level = level.clone();
@@ -249,8 +249,8 @@ public class Game {
 		//21
 		level = level.clone();
 		level.setStage(21);
-		level.setPacmanSpeed(15);
-		level.setPacmanEatingDotsSpeed(18);
+		level.setPacmanSpeed(7);
+		level.setPacmanEatingDotsSpeed(9);
 		level.setCruiseElroyDotsLeft2(60);
 		levels.add(level);
 		//The other levels have the same parameters as level 21	
