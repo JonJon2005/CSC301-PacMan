@@ -804,7 +804,9 @@ public class Game {
 	private void searchClydeTarget() {
 		switch(Ghost.state) {
 		case CHASE:
-			if(map.getDistance(clyde.getPosition(), pacman.getPosition()) <= 3) {
+			//CLYDE BECOMES SCARED WITHIN 8 TILES NOW, PREVIOUSLY WAS 3
+			//-Jonathan Gallo 
+			if(map.getDistance(clyde.getPosition(), pacman.getPosition()) <= 8/*<--- I changed this */) {
 				if(clyde.getTarget().equals(coordinates.get(46))) {
 					clyde.setTarget(coordinates.get(26));
 				} else if(clyde.getTarget().equals(coordinates.get(26))) {
