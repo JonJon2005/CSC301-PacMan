@@ -29,8 +29,6 @@ The Maven build pins JavaFX to `20.0.2`. If you use Eclipse or IntelliJ instead,
   ![Overview](resources/overview/gameover.png?raw=true)
   ![Overview](resources/overview/leaderboard.png?raw=true)
 
-## Made by
+## Originally made by
 + [Daniel Alejandro Fernández Robles](https://github.com/7yrionLannister "Daniel Fernández")
 + [Camilo Enriquez Delgado](https://github.com/Stigma137 "Camilo Enriquez")
-
-  [![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
