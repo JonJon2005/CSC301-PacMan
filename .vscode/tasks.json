@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Maven Compile",
+      "type": "shell",
+      "command": "JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-20.jdk/Contents/Home mvn -DskipTests compile",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run PacMan with Maven",
+      "type": "shell",
+      "command": "JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-20.jdk/Contents/Home mvn javafx:run",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}

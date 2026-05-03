@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run PacMan",
+      "type": "java",
+      "request": "launch",
+      "mainClass": "ui.Main",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Maven Compile",
+      "classPaths": [
+        "${workspaceFolder}/target/classes"
+      ],
+      "vmArgs": "--module-path ${userHome}/.m2/repository/org/openjfx/javafx-base/20.0.2:${userHome}/.m2/repository/org/openjfx/javafx-graphics/20.0.2:${userHome}/.m2/repository/org/openjfx/javafx-controls/20.0.2:${userHome}/.m2/repository/org/openjfx/javafx-fxml/20.0.2:${userHome}/.m2/repository/org/openjfx/javafx-media/20.0.2 --add-modules javafx.controls,javafx.fxml,javafx.media"
+    }
+  ]
+}
