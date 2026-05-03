@@ -28,7 +28,10 @@ public class PacmanThread extends Thread {
 	private Pacman pacman;
 	/**A long variable to set sleep times when is needed.
 	 */
-	private long rate = 0;
+	private long rate = 16;
+	/**It caches Pacman's movement sprites so the movement loop does not load images from disk repeatedly.
+	 */
+	private Image[] movementImages;
 
 	
 	/**Creates a thread for Pacman as from a primary controller where the game is contained.
@@ -40,6 +43,10 @@ public class PacmanThread extends Thread {
 		game = c.getGame();
 		pacman = game.getPacman();
 		PrimaryStageController.MOVEMENT_SPRITE = 0;
+		movementImages = new Image[4];
+		for(int i = 0; i < movementImages.length; i++) {
+			movementImages[i] = new Image(new File(MOVEMENTS+i+".png").toURI().toString());
+		}
 		setDaemon(true);
 	}
 	
@@ -52,6 +59,8 @@ public class PacmanThread extends Thread {
 				move();
 				refreshGUI();
 				determineRate();
+			} else {
+				rate = 16;
 			}
 			try {
 				sleep(rate);
@@ -64,9 +73,6 @@ public class PacmanThread extends Thread {
 	 */
 	private void move() {
 		PrimaryStageController.MOVEMENT_COUNTER++;
-		if((PrimaryStageController.MOVEMENT_COUNTER*PrimaryStageController.MOVEMENT_SPRITE) % 2 == 0) {
-			pacmanImage.setImage(new Image(new File(MOVEMENTS+PrimaryStageController.MOVEMENT_SPRITE+".png").toURI().toString()));
-		}
 		if(PrimaryStageController.MOVEMENT_COUNTER % 3 == 0) {
 			PrimaryStageController.MOVEMENT_SPRITE++;
 			if(PrimaryStageController.MOVEMENT_SPRITE > 3) {
@@ -84,15 +90,20 @@ public class PacmanThread extends Thread {
 	private void die() {
 		controller.setOnPause(true);
 		controller.getDeath().play();
-		controller.getBlinky().setVisible(false);
-		controller.getPinky().setVisible(false);
-		controller.getInky().setVisible(false);
-		controller.getClyde().setVisible(false);
+		Platform.runLater(() -> {
+			controller.getBlinky().setVisible(false);
+			controller.getPinky().setVisible(false);
+			controller.getInky().setVisible(false);
+			controller.getClyde().setVisible(false);
+		});
 		int sprite = 0;
 		while(sprite < 13) {
 			try {
-				pacmanImage.setRotate(0);
-				pacmanImage.setImage(new Image(new File(PrimaryStageController.CAUGHT+sprite+".png").toURI().toString()));
+				int currentSprite = sprite;
+				Platform.runLater(() -> {
+					pacmanImage.setRotate(0);
+					pacmanImage.setImage(new Image(new File(PrimaryStageController.CAUGHT+currentSprite+".png").toURI().toString()));
+				});
 				sprite++;
 				sleep(100);
 			} catch (InterruptedException e) {
@@ -104,7 +115,7 @@ public class PacmanThread extends Thread {
 			controller.startPlayPauseButtonPressed(null);
 		} else {
 			Game.POINTS_EXTRA_LIVE = 5000;
-			controller.getGameOverImage().setVisible(true);
+			Platform.runLater(() -> controller.getGameOverImage().setVisible(true));
 			controller.setOnPause(true);
 			Platform.runLater(() -> controller.openPlayerRegister());
 		}
@@ -128,7 +139,10 @@ public class PacmanThread extends Thread {
 					pacmanImage.setRotate(270);
 					break;
 				}
-				
+
+				if((PrimaryStageController.MOVEMENT_COUNTER*PrimaryStageController.MOVEMENT_SPRITE) % 2 == 0) {
+					pacmanImage.setImage(movementImages[(int)PrimaryStageController.MOVEMENT_SPRITE]);
+				}
 				controller.getScoreLabel().setText(game.getScore()+"");
 				pacmanImage.relocate(pacman.getPosX(), pacman.getPosY());
 				Ghost ghost = game.getBlinky();

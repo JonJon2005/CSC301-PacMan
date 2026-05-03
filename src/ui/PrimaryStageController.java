@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.BiConsumer;
@@ -127,6 +128,9 @@ public class PrimaryStageController {
 	/**It represents if the game is in pause or not.
 	 */
 	private boolean onPause;
+	/**It caches sprite images used during gameplay.
+	 */
+	private HashMap<String, Image> imageCache;
 
 	/**This initializes all the characters and the maze. 
 	 */
@@ -137,6 +141,7 @@ public class PrimaryStageController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		imageCache = new HashMap<>();
 
 		readyImage.setVisible(false);
 		gameOverImage.setVisible(false);
@@ -312,7 +317,7 @@ public class PrimaryStageController {
 			onPause = true;
 			readyImage.setVisible(true);
 			if(game.getCurrentLevel().getDotsLeft() == game.getInitialNumberOfDots()) { //no dots eaten in the stage
-				bonusImage.setImage(new Image(new File("resources/sprites/food/bonus/"+game.getCurrentLevel().getBonus()+".png").toURI().toString()));
+				bonusImage.setImage(getCachedImage("resources/sprites/food/bonus/"+game.getCurrentLevel().getBonus()+".png"));
 				if(game.getCurrentLevel().getStage() == 1) { //plays intro sound in the first stage
 					intro.play();
 				}
@@ -320,9 +325,9 @@ public class PrimaryStageController {
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run() {
-					readyImage.setVisible(false);
 					MOVEMENT_COUNTER++;
 					onPause = false;
+					Platform.runLater(() -> readyImage.setVisible(false));
 					if(game.allGhostsInTheirHouse()) {
 						game.startSequence();
 					}
@@ -361,7 +366,7 @@ public class PrimaryStageController {
 				if(game.getFrightenedCountdown() < 2000 && MOVEMENT_SPRITE % 4 == 0) {
 					num++;
 				}
-				ghostImage.setImage(new Image(new File(PrimaryStageController.GHOSTS_SPRITES+"vulnerable"+File.separator+num+".png").toURI().toString()));
+				ghostImage.setImage(getCachedImage(PrimaryStageController.GHOSTS_SPRITES+"vulnerable"+File.separator+num+".png"));
 			} else {
 				long number = (PrimaryStageController.MOVEMENT_COUNTER%2);
 				String dir = "";
@@ -380,9 +385,9 @@ public class PrimaryStageController {
 					break;
 				}
 				if(ghost.isGoingHome().get()) {
-					ghostImage.setImage(new Image(new File(PrimaryStageController.GHOSTS_SPRITES+"eyes"+File.separator+dir+".png").toURI().toString()));
+					ghostImage.setImage(getCachedImage(PrimaryStageController.GHOSTS_SPRITES+"eyes"+File.separator+dir+".png"));
 				} else {
-					ghostImage.setImage(new Image(new File(PrimaryStageController.GHOSTS_SPRITES+ghost.getName()+File.separator+dir+number+".png").toURI().toString()));
+					ghostImage.setImage(getCachedImage(PrimaryStageController.GHOSTS_SPRITES+ghost.getName()+File.separator+dir+number+".png"));
 				}
 			}
 		}
@@ -391,21 +396,23 @@ public class PrimaryStageController {
 	/**This sets all the gui components in their initial state.
 	 */
 	public void setGUItoInitialState() {
-		pacman.setImage(new Image(new File(PacmanThread.MOVEMENTS+0+".png").toURI().toString()));
+		pacman.setImage(getCachedImage(PacmanThread.MOVEMENTS+0+".png"));
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
 				game.setCharactersToInitialTiles();
-				pacman.setVisible(true);
-				blinky.setVisible(true);
-				pinky.setVisible(true);
-				inky.setVisible(true);
-				clyde.setVisible(true);
-				pacman.relocate(game.getPacman().getPosX(), game.getPacman().getPosY());
-				blinky.relocate(game.getBlinky().getPosX(), game.getBlinky().getPosY());
-				inky.relocate(game.getInky().getPosX(), game.getInky().getPosY());
-				pinky.relocate(game.getPinky().getPosX(), game.getPinky().getPosY());
-				clyde.relocate(game.getClyde().getPosX(), game.getClyde().getPosY());
+				Platform.runLater(() -> {
+					pacman.setVisible(true);
+					blinky.setVisible(true);
+					pinky.setVisible(true);
+					inky.setVisible(true);
+					clyde.setVisible(true);
+					pacman.relocate(game.getPacman().getPosX(), game.getPacman().getPosY());
+					blinky.relocate(game.getBlinky().getPosX(), game.getBlinky().getPosY());
+					inky.relocate(game.getInky().getPosX(), game.getInky().getPosY());
+					pinky.relocate(game.getPinky().getPosX(), game.getPinky().getPosY());
+					clyde.relocate(game.getClyde().getPosX(), game.getClyde().getPosY());
+				});
 			}
 		};
 		Timer timer = new Timer("Timer");
@@ -708,5 +715,9 @@ public class PrimaryStageController {
 	 */
 	public AudioClip getDeath() {
 		return death;
+	}
+
+	private Image getCachedImage(String path) {
+		return imageCache.computeIfAbsent(path, imagePath -> new Image(new File(imagePath).toURI().toString()));
 	}
 }
