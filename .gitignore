@@ -1,2 +1,27 @@
+# Java / Maven build output
 /bin/
 /target/
+/out/
+*.class
+
+# Runtime-generated game data
+/resources/leaderboard.pac
+
+# IDE / editor metadata
+/.classpath
+/.project
+/.settings/
+/.idea/
+*.iml
+/.vscode/*
+!/.vscode/launch.json
+!/.vscode/tasks.json
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# OS metadata
+.DS_Store
+Thumbs.db
