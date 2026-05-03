@@ -13,15 +13,64 @@ The objective of the game is to accumulate as many points as possible by eating 
 
 You can change Pac-man direction using either **WASD**, **IJKL** or the arrow keys.
 
-## Run with Java 20 and JavaFX 20
+## Run from a fresh clone
 
-Install JDK 20 and run the game with Maven:
+This project runs with Java 20 and JavaFX 20.0.2. JavaFX is pulled by Maven, so you do not need to install a separate JavaFX SDK.
+
+### Requirements
+
+- JDK 20
+- Maven
+- Cursor, VS Code, IntelliJ, or a terminal
+
+Verify Java and Maven:
+
+```sh
+java -version
+mvn -version
+```
+
+If your default Java is not Java 20, run Maven with `JAVA_HOME` set to your JDK 20 install. On this machine the JDK 20 path is:
+
+```sh
+/Library/Java/JavaVirtualMachines/jdk-20.jdk/Contents/Home
+```
+
+### Clone and run from terminal
+
+```sh
+git clone https://github.com/JonJon2005/CSC301-PacMan.git
+cd CSC301-PacMan
+JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-20.jdk/Contents/Home mvn javafx:run
+```
+
+If your terminal already uses Java 20, this is enough:
 
 ```sh
 mvn javafx:run
 ```
 
-The Maven build pins JavaFX to `20.0.2`. If you use Eclipse or IntelliJ instead, configure the project SDK/JRE as Java 20 and add a JavaFX 20 SDK/library named `JavaFX-20.0.2` in Eclipse or `JavaFX-20` in IntelliJ.
+### Run from Cursor or VS Code
+
+This repo includes `.vscode/launch.json` and `.vscode/tasks.json`.
+
+1. Open the cloned `CSC301-PacMan` folder in Cursor or VS Code.
+2. Install the Java extension pack if prompted.
+3. Open the Run and Debug sidebar.
+4. Select `Run PacMan`.
+5. Click the play button.
+
+The launch configuration runs `mvn -DskipTests compile` first, then starts `ui.Main` with JavaFX 20.0.2 from Maven's local cache.
+
+You can also run the Maven task directly:
+
+1. Press `Cmd + Shift + P`.
+2. Choose `Tasks: Run Build Task`.
+3. Select `Run PacMan with Maven`.
+
+### Stop the game
+
+Close the Pac-Man window normally. If the process stays alive, click the red stop button in Cursor/VS Code or press `Shift + F5`. If you started it in a terminal, press `Ctrl + C`.
   
 ## Overview
   ![Overview](resources/overview/ready.png?raw=true)
