@@ -474,7 +474,10 @@ public class Game {
 
 			eatContentOfTile();
 
-			food.get(pacman.getPosition()).setType(Food.NOTHING); //Pacman ate
+			Food currentTileFood = food.get(pacman.getPosition());
+			if(!currentTileFood.getNotEaten().get()) {
+				currentTileFood.setType(Food.NOTHING); //Pacman ate
+			}
 			if(getCurrentLevel().getDotsLeft() == initialNumberOfDots/2) { //bonus at halfway
 				food.get(bonusTile).setNotEaten(true);
 			} else if(getCurrentLevel().getDotsLeft() == initialNumberOfDots/3) { //but it eventually disappears
