@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane stylesheets="@pg.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.NameRegisterController">
+<BorderPane stylesheets="@pg.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.NameRegisterController">
    <bottom>
       <Button mnemonicParsing="false" onAction="#register" text="Register Score" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -28,7 +28,7 @@
    <top>
       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <image>
-            <Image url="@../../resources/game_over.png" />
+            <Image url="@../game_over.png" />
          </image>
       </ImageView>
    </top>

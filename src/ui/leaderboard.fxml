@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane maxHeight="375.0" stylesheets="@pg.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.LeaderboardController">
+<BorderPane maxHeight="375.0" stylesheets="@pg.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.LeaderboardController">
    <center>
       <TableView fx:id="lb" cache="true" editable="true" maxWidth="1.7976931348623157E308" stylesheets="@pg.css" BorderPane.alignment="CENTER">
         <columns>
@@ -27,22 +27,22 @@
          <children>
             <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/sprites/ghosts/inky/u0.png" />
+                  <Image url="@../sprites/ghosts/inky/u0.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/sprites/ghosts/pinky/u1.png" />
+                  <Image url="@../sprites/ghosts/pinky/u1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/sprites/ghosts/blinky/u0.png" />
+                  <Image url="@../sprites/ghosts/blinky/u0.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/sprites/ghosts/clyde/u1.png" />
+                  <Image url="@../sprites/ghosts/clyde/u1.png" />
                </image>
             </ImageView>
          </children>

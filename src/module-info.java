@@ -5,4 +5,5 @@ module pacman.game {
     requires javafx.media;
 
     opens ui;
+    opens model to javafx.base;
 }

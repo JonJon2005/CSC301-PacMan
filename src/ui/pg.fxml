@@ -13,55 +13,55 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#changeDirection" stylesheets="@pg.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.PrimaryStageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#changeDirection" stylesheets="@pg.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.PrimaryStageController">
    <center>
       <StackPane BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="375.0" fitWidth="409.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/sprites/map.jpeg" />
+                  <Image url="@../sprites/map.jpeg" />
                </image>
             </ImageView>
             <AnchorPane fx:id="map">
                <children>
                   <ImageView fx:id="inky" fitHeight="25.0" fitWidth="25.0" layoutX="148.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/ghosts/inky/d0.png" />
+                        <Image url="@../sprites/ghosts/inky/d0.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="pinky" fitHeight="25.0" fitWidth="25.0" layoutX="168.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/ghosts/pinky/u0.png" />
+                        <Image url="@../sprites/ghosts/pinky/u0.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="clyde" fitHeight="25.0" fitWidth="25.0" layoutX="187.0" layoutY="160.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/ghosts/clyde/d0.png" />
+                        <Image url="@../sprites/ghosts/clyde/d0.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="blinky" fitHeight="25.0" fitWidth="25.0" layoutX="168.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/ghosts/blinky/l0.png" />
+                        <Image url="@../sprites/ghosts/blinky/l0.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="pacman" fitHeight="25.0" fitWidth="25.0" layoutX="168.0" layoutY="255.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/pacman/movements/0.png" />
+                        <Image url="@../sprites/pacman/movements/0.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="readyImage" fitHeight="22.0" fitWidth="68.0" layoutX="149.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/ready.png" />
+                        <Image url="@../ready.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="gameOverImage" fitHeight="16.0" fitWidth="106.0" layoutX="127.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/game_over.png" />
+                        <Image url="@../game_over.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="bonusImage" fitHeight="25.0" fitWidth="25.0" layoutX="168.0" layoutY="196.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/food/bonus/cherry.png" />
+                        <Image url="@../sprites/food/bonus/cherry.png" />
                      </image>
                   </ImageView>
                   <Rectangle fx:id="blackSquare2" arcHeight="5.0" arcWidth="5.0" height="40.0" layoutY="157.0" stroke="BLACK" strokeType="INSIDE" width="40.0" />
@@ -92,27 +92,27 @@
                <children>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/lives.png" />
+                        <Image url="@../sprites/lives.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/lives.png" />
+                        <Image url="@../sprites/lives.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/lives.png" />
+                        <Image url="@../sprites/lives.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/lives.png" />
+                        <Image url="@../sprites/lives.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/lives.png" />
+                        <Image url="@../sprites/lives.png" />
                      </image>
                   </ImageView>
                </children></FlowPane>
@@ -120,42 +120,42 @@
                <children>
                   <ImageView fx:id="key" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/food/bonus/key.png" />
+                        <Image url="@../sprites/food/bonus/key.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="bell" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/food/bonus/bell.png" />
+                        <Image url="@../sprites/food/bonus/bell.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="galaxian" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/food/bonus/galaxian.png" />
+                        <Image url="@../sprites/food/bonus/galaxian.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="melon" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/food/bonus/melon.png" />
+                        <Image url="@../sprites/food/bonus/melon.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="apple" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/food/bonus/apple.png" />
+                        <Image url="@../sprites/food/bonus/apple.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="peach" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/food/bonus/peach.png" />
+                        <Image url="@../sprites/food/bonus/peach.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="strawberry" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/food/bonus/strawberry.png" />
+                        <Image url="@../sprites/food/bonus/strawberry.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="cherry" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/sprites/food/bonus/cherry.png" />
+                        <Image url="@../sprites/food/bonus/cherry.png" />
                      </image>
                   </ImageView>
                </children>
