@@ -4,17 +4,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.function.BiConsumer;
 import dataStructures.AdjacencyListGraph;
 import dataStructures.AdjacencyMatrixGraph;
 import dataStructures.IGraph;
 import model.Ghost.State;
+import org.jetbrains.annotations.Nullable;
+
+import static java.lang.Math.*;
 
 public class Game {
 
@@ -350,24 +348,28 @@ public class Game {
 		pacman.setPosX(xCoord);
 		pacman.setPosY(tile.getY());
 		pacman.setDirection(Direction.LEFT);
+
 		tile = coordinates.get(99);
 		pinky.setPosition(tile);
 		pinky.setPosX(tile.getX());
 		pinky.setPosY(tile.getY()+7);
 		pinky.setDirection(Direction.UP);
 		pinky.setTarget(coordinates.get(17));
+
 		tile = coordinates.get(98);
 		blinky.setPosition(tile);
 		blinky.setPosX(xCoord);
 		blinky.setPosY(tile.getY());
 		blinky.setDirection(Direction.LEFT);
 		blinky.setTarget(coordinates.get(68));
+
 		tile = coordinates.get(100);
 		inky.setPosition(tile);
 		inky.setPosX(tile.getX());
 		inky.setPosY(tile.getY());
 		inky.setDirection(Direction.DOWN);
 		inky.setTarget(coordinates.get(77));
+
 		tile = coordinates.get(101);
 		clyde.setPosition(tile);
 		clyde.setPosX(tile.getX());
@@ -730,7 +732,19 @@ public class Game {
 			ghost.setPath(map.getSingleSourcePath(ghost.getTarget()));
 		} else if(ghost.equals(pinky) && Ghost.state == State.CHASE) {
 			ghost.setPath(aStarPath(ghost.getPosition(), ghost.getTarget()));
-		} else { //uses BFS when frightened because ghosts are not influenced by the weight of the edges in that state
+		} else if (ghost.equals(inky) && Ghost.state == State.CHASE) {
+			// Inky utilizes a hybrid strategy of BFS and A*.
+
+			if (heuristicDistance(inky.getPosition(), pacman.getPosition()) > 8.0) {
+				// Switch to BFS when close to Pac-Man in order to get a precise location to chase
+				ghost.setPath(map.getPath(ghost.getPosition(), ghost.getTarget()));
+			} else {
+				// Too far! Utilize A* to efficiently get in range of BFS
+				// to once again precisely locate Pac-Man
+				ghost.setPath(aStarPath(ghost.getPosition(), ghost.getTarget()));
+			}
+		}
+		else { // uses BFS when frightened because ghosts are not influenced by the weight of the edges in that state
 			ghost.setPath(map.getPath(ghost.getPosition(), ghost.getTarget()));
 		}
 		if(ghost.getPath().isEmpty()) {
@@ -742,8 +756,7 @@ public class Game {
 		determineDirection(ghost);
 	}
 
-	/**This method finds blinky's target.
-	 */
+
 	private void searchBlinkyTarget() {
 		switch(Ghost.state) {
 		case CHASE:
@@ -751,7 +764,7 @@ public class Game {
 			break;
 		case SCATTER:
 			Level lvl = getCurrentLevel();
-			if(lvl.getDotsLeft() <= lvl.getCruiseElroyDotsLeft1()) { //Aggressive even when his brothers are in scatter mode but (TODO) he waits for Clyde to reach its scatter tile before pursuing Pacman in the first scatter period
+			if(lvl.getDotsLeft() <= lvl.getCruiseElroyDotsLeft1()) {
 				blinky.setTarget(pacman.getPosition());
 			} else if(blinky.getTarget().equals(coordinates.get(70))) {
 				blinky.setTarget(coordinates.get(79));
@@ -763,17 +776,50 @@ public class Game {
 		}
 	}
 
-	/**This method finds inky's target.
-	 */
+
+	private void searchPinkyTarget() {
+		switch(Ghost.state) {
+			case CHASE:
+				pinky.setTarget(getTileAheadOfPacman(2));
+				break;
+			case SCATTER:
+				if(pinky.getTarget().equals(coordinates.get(9))) {
+					pinky.setTarget(coordinates.get(2));
+				} else if(pinky.getTarget().equals(coordinates.get(2))){
+					pinky.setTarget(coordinates.get(19));
+				} else {
+					pinky.setTarget(coordinates.get(9));
+				}
+				break;
+		}
+	}
+
+	// - David
+	// Inky's pathfinding now accounts for game state
+	// And predictable habits
 	private void searchInkyTarget() {
+		Coordinate nearestPelletCoordinate = getNearestPellet(pacman);
+		System.out.println("Distance to Inky: %s, Distance to Power Pellet: %s".formatted(
+				(distanceBetween(inky.getPosition(), pacman.getPosition())),
+				distanceBetween(nearestPelletCoordinate, pacman.getPosition())));
+
 		switch(Ghost.state) {
 		case CHASE:
-			ArrayList<Coordinate> adj = map.getAdjacent(pacman.getPosition());
-			adj = map.getAdjacent(adj.get((int)(Math.random()*adj.size())));
-			adj = map.getAdjacent(adj.get((int)(Math.random()*adj.size())));
-			adj = map.getAdjacent(adj.get((int)(Math.random()*adj.size())));
-			adj = map.getAdjacent(adj.get((int)(Math.random()*adj.size())));
-			inky.setTarget(adj.get((int)(Math.random()*adj.size())));
+			if (distanceBetween(inky.getPosition(), pacman.getPosition()) > 100.0) {
+				// Navigate to where Pac-Man is likely to go, cutting him off
+				inky.setTarget(getTileAheadOfPacman(3));
+			} else {
+				// Inky can chase directly
+				//Coordinate nearestPelletCoordinate = getNearestPellet(pacman);
+				System.out.println("%s".formatted(distanceBetween(nearestPelletCoordinate, pacman.getPosition())));
+
+				if (nearestPelletCoordinate != null && distanceBetween(nearestPelletCoordinate, pacman.getPosition()) < 60.0) {
+					// Pac-Man will likely eat a power pellet soon, be careful
+					inky.setTarget(getTileAheadOfPacman(1));
+				} else {
+					inky.setTarget(pacman.getPosition());
+				}
+			}
 			break;
 		case SCATTER:
 			if(inky.getTarget().equals(coordinates.get(56))) {
@@ -787,23 +833,50 @@ public class Game {
 		}
 	}
 
-	/**This method finds pinky's target
+	// - David
+	/**Method to get the distance between two given coordinates.
+	 * @param coord1 is the first coordinate
+	 * @param coord2 is the second coordinate
+	 * @return The distance between the two coordinates
 	 */
-	private void searchPinkyTarget() {
-		switch(Ghost.state) {
-		case CHASE:
-			pinky.setTarget(getTileAheadOfPacman(2));
-			break;
-		case SCATTER:
-			if(pinky.getTarget().equals(coordinates.get(9))) {
-				pinky.setTarget(coordinates.get(2));
-			} else if(pinky.getTarget().equals(coordinates.get(2))){
-				pinky.setTarget(coordinates.get(19));
-			} else {
-				pinky.setTarget(coordinates.get(9));
+	private double distanceBetween(Coordinate coord1, Coordinate coord2) {
+		double length = pow(coord1.getX() - coord2.getX(), 2);
+		double height = pow(coord1.getY() - coord2.getY(), 2);
+		return sqrt(length + height);
+	}
+
+	// - David
+	/**Method to get the coordinate of the power pellet closet to a character.
+	 * @param character is the character to search around
+	 * @return The distance to the pellet. Returns null if no pellets remain
+	 */
+	@Nullable
+	private Coordinate getNearestPellet(Character character) {
+		double bestDistance = -1;
+		double distanceTo;
+		Coordinate nearestPelletCoordinate = null;
+
+		ArrayList<Coordinate> energizerSpawns = new ArrayList<>(
+				Arrays.asList(
+						coordinates.get(1),
+						coordinates.get(88),
+						coordinates.get(6),
+						coordinates.get(93)
+		));
+
+		for (Coordinate spawn : energizerSpawns) {
+			if (food.get(spawn).getType() == Food.ENERGIZER) {
+				// Power pellet still exists at this tile
+				distanceTo = distanceBetween(character.getPosition(), spawn);
+
+				if (distanceTo > bestDistance) {
+					bestDistance = distanceTo;
+					nearestPelletCoordinate = spawn;
+				}
 			}
-			break;
 		}
+
+		return nearestPelletCoordinate;
 	}
 
 	//-Jonathan
@@ -937,7 +1010,7 @@ public class Game {
 	 * Helper method
 	 */
 	private double heuristicDistance(Coordinate current, Coordinate goal) {
-		return (Math.abs(current.getX() - goal.getX()) + Math.abs(current.getY() - goal.getY())) / 99.0;
+		return (abs(current.getX() - goal.getX()) + abs(current.getY() - goal.getY())) / 99.0;
 	}
 
 	//-Jonathan
@@ -1013,8 +1086,8 @@ public class Game {
 	 * @param ghost is a ghost that could be any of the four ghosts created.
 	 */
 	private void checkCollisionWithPacman(Ghost ghost) {
-		int difX = (int)Math.abs(ghost.getPosX() - pacman.getPosX());
-		int difY = (int)Math.abs(ghost.getPosY() - pacman.getPosY());
+		int difX = (int) abs(ghost.getPosX() - pacman.getPosX());
+		int difY = (int) abs(ghost.getPosY() - pacman.getPosY());
 		if(difX <= 2 && difY <= 2) {
 			if(ghost.isFrightened()) {
 				ghostsEaten++;

@@ -81,3 +81,9 @@ Close the Pac-Man window normally. If the process stays alive, click the red sto
 ## Originally made by
 + [Daniel Alejandro Fernández Robles](https://github.com/7yrionLannister "Daniel Fernández")
 + [Camilo Enriquez Delgado](https://github.com/Stigma137 "Camilo Enriquez")
+
+## Modifications by
++ [Jonathan Gallo](https://github.com/JonJon2005 "Jonathan Gallo")
++ [David Flater](https://github.com/dayflay "David Flater")
+
+For a detailed summary of findings, see `summary.md`
