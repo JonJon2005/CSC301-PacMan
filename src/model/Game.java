@@ -143,10 +143,10 @@ public class Game {
 		levels = new ArrayList<>();
 		//levels.add(new Level(stage, bonus, pacmanSpeed, pacmanEatingDotsSpeed, ghostsSpeed, ghostsTunelSpeed, cruiseElroyDotsLeft1, cruiseElroySpeed1, cruiseElroyDotsLeft2, cruiseElroySpeed2, pacmanWithEnergizerSpeed, pacmanWithEnergizerEatingDotsSpeed, frightGhostsSpeed, frightTime))
 		//1
-		Level level = new Level(1, Level.CHERRIES, 8, 10, 15, 28, 20, 14, 10, 13, 8, 9, 22, 6000);
+		Level level = new Level(1, Level.CHERRIES, 10, 11, 15, 28, 20, 14, 10, 13, 10, 11, 22, 6000);
 		levels.add(level);
 		//2
-		level = new Level(2, Level.STRAWBERRY, 8, 9, 13, 25, 30, 13, 15, 12, 7, 8, 20, 5000);
+		level = new Level(2, Level.STRAWBERRY, 10, 11, 13, 25, 30, 13, 15, 12, 10, 11, 20, 5000);
 		levels.add(level);
 		//3
 		level = level.clone();
@@ -162,7 +162,7 @@ public class Game {
 		level.setFrightTime(3000);
 		levels.add(level);
 		//5
-		level = new Level(5, Level.APPLE, 7, 8, 12, 22, 40, 11, 20, 10, 7, 8, 18, 2000);
+		level = new Level(5, Level.APPLE, 10, 11, 12, 22, 40, 11, 20, 10, 10, 11, 18, 2000);
 		levels.add(level);
 		//6
 		level = level.clone();
@@ -249,8 +249,6 @@ public class Game {
 		//21
 		level = level.clone();
 		level.setStage(21);
-		level.setPacmanSpeed(7);
-		level.setPacmanEatingDotsSpeed(9);
 		level.setCruiseElroyDotsLeft2(60);
 		levels.add(level);
 		//The other levels have the same parameters as level 21	
@@ -798,9 +796,6 @@ public class Game {
 	// And predictable habits
 	private void searchInkyTarget() {
 		Coordinate nearestPelletCoordinate = getNearestPellet(pacman);
-		System.out.println("Distance to Inky: %s, Distance to Power Pellet: %s".formatted(
-				(distanceBetween(inky.getPosition(), pacman.getPosition())),
-				distanceBetween(nearestPelletCoordinate, pacman.getPosition())));
 
 		switch(Ghost.state) {
 		case CHASE:
@@ -809,9 +804,6 @@ public class Game {
 				inky.setTarget(getTileAheadOfPacman(3));
 			} else {
 				// Inky can chase directly
-				//Coordinate nearestPelletCoordinate = getNearestPellet(pacman);
-				System.out.println("%s".formatted(distanceBetween(nearestPelletCoordinate, pacman.getPosition())));
-
 				if (nearestPelletCoordinate != null && distanceBetween(nearestPelletCoordinate, pacman.getPosition()) < 60.0) {
 					// Pac-Man will likely eat a power pellet soon, be careful
 					inky.setTarget(getTileAheadOfPacman(1));
