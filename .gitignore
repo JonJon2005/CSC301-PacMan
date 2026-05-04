@@ -16,6 +16,7 @@
 /.vscode/*
 !/.vscode/launch.json
 !/.vscode/tasks.json
+/src/.vscode/
 
 # Logs and temporary files
 *.log
