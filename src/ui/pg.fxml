@@ -15,14 +15,14 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#changeDirection" stylesheets="@pg.css" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.PrimaryStageController">
    <center>
-      <StackPane BorderPane.alignment="CENTER">
+      <StackPane maxHeight="375.0" maxWidth="375.0" minHeight="375.0" minWidth="375.0" prefHeight="375.0" prefWidth="375.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="375.0" fitWidth="409.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="375.0" fitWidth="375.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../sprites/map.jpeg" />
                </image>
             </ImageView>
-            <AnchorPane fx:id="map">
+            <AnchorPane fx:id="map" maxHeight="375.0" maxWidth="375.0" minHeight="375.0" minWidth="375.0" prefHeight="375.0" prefWidth="375.0">
                <children>
                   <ImageView fx:id="inky" fitHeight="25.0" fitWidth="25.0" layoutX="148.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
                      <image>
