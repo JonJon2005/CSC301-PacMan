@@ -756,7 +756,6 @@ public class Game {
 		determineDirection(ghost);
 	}
 
-
 	private void searchBlinkyTarget() {
 		switch(Ghost.state) {
 		case CHASE:
@@ -856,6 +855,7 @@ public class Game {
 		double distanceTo;
 		Coordinate nearestPelletCoordinate = null;
 
+		// Energizers only occur in very specific locations
 		ArrayList<Coordinate> energizerSpawns = new ArrayList<>(
 				Arrays.asList(
 						coordinates.get(1),
