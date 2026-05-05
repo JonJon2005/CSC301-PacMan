@@ -13,64 +13,50 @@ The objective of the game is to accumulate as many points as possible by eating 
 
 You can change Pac-man direction using either **WASD**, **IJKL** or the arrow keys.
 
-## Run from a fresh clone
+## Setup and Running
 
-This project runs with Java 20 and JavaFX 20.0.2. JavaFX is pulled by Maven, so you do not need to install a separate JavaFX SDK.
+This project requires **Java JDK 20** and **Maven**.
+
+You do **not** need to install JavaFX manually. The project uses JavaFX `20.0.2`, and Maven will download the required JavaFX libraries automatically from the dependencies in `pom.xml`.
 
 ### Requirements
 
-- JDK 20
+- Java JDK 20
 - Maven
-- Cursor, VS Code, IntelliJ, or a terminal
+- A terminal or Java IDE such as IntelliJ, Eclipse, VS Code, or Cursor
 
-Verify Java and Maven:
+Check that Java and Maven are installed:
 
 ```sh
 java -version
 mvn -version
 ```
 
-If your default Java is not Java 20, run Maven with `JAVA_HOME` set to your JDK 20 install. On this machine the JDK 20 path is:
+The Java version should be 20. If your computer has multiple Java versions installed, configure your terminal or IDE to use JDK 20.
 
-```sh
-/Library/Java/JavaVirtualMachines/jdk-20.jdk/Contents/Home
-```
+### Run from Terminal
 
-### Clone and run from terminal
-
-```sh
-git clone https://github.com/JonJon2005/CSC301-PacMan.git
-cd CSC301-PacMan
-JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-20.jdk/Contents/Home mvn javafx:run
-```
-
-If your terminal already uses Java 20, this is enough:
+From the project folder, run:
 
 ```sh
 mvn javafx:run
 ```
 
-### Run from Cursor or VS Code
+On the first run, Maven may take a minute to download dependencies, including JavaFX 20.0.2. After that, it should start faster.
 
-This repo includes `.vscode/launch.json` and `.vscode/tasks.json`.
+### Run from an IDE
 
-1. Open the cloned `CSC301-PacMan` folder in Cursor or VS Code.
-2. Install the Java extension pack if prompted.
-3. Open the Run and Debug sidebar.
-4. Select `Run PacMan`.
-5. Click the play button.
+Open the project as a Maven project, make sure the project SDK/JDK is set to Java 20, then run the Maven goal:
 
-The launch configuration runs `mvn -DskipTests compile` first, then starts `ui.Main` with JavaFX 20.0.2 from Maven's local cache.
+```sh
+javafx:run
+```
 
-You can also run the Maven task directly:
+In VS Code or Cursor, you can also use the included run configuration named `Run PacMan`.
 
-1. Press `Cmd + Shift + P`.
-2. Choose `Tasks: Run Build Task`.
-3. Select `Run PacMan with Maven`.
+### Stop the Game
 
-### Stop the game
-
-Close the Pac-Man window normally. If the process stays alive, click the red stop button in Cursor/VS Code or press `Shift + F5`. If you started it in a terminal, press `Ctrl + C`.
+Close the Pac-Man window normally. If the process stays alive, stop it from the IDE or press `Ctrl + C` in the terminal.
   
 ## Overview
   ![Overview](resources/overview/ready.png?raw=true)
